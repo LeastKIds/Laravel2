@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddImageToPostsTable extends Migration
+class CreateCommentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,14 @@ class AddImageToPostsTable extends Migration
      */
     public function up()
     {
-        Schema::table('posts', function (Blueprint $table) {
-            //
-
+        Schema::create('comments', function (Blueprint $table) {
+            $table->id();
+            $table->timestamps();
+            $table->text('content');
+            $table  -> foreignId('user_id')
+                -> constrained()
+                -> onUpdate('cascade')
+                -> onDelete('cascade');
             $table->string('image')->nullable();
         });
     }
@@ -27,8 +32,6 @@ class AddImageToPostsTable extends Migration
      */
     public function down()
     {
-        Schema::table('posts', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('comments');
     }
 }

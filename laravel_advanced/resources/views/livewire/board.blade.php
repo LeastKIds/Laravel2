@@ -1,18 +1,72 @@
 <div>
 {{--    --}}{{-- Stop trying to control. --}}
-    <div class="card lg:card-side bordered">
-        @foreach($posts as $post)
-        <figure>
-            <img src="https://picsum.photos/id/1005/400/250">
-        </figure>
-        <div class="card-body">
-            <h2 class="card-title">{{$post -> title}}</h2>
-            <p>{{$post -> comtent}}</p>
-            <div class="card-actions">
-                <button class="btn btn-primary">Get Started</button>
-                <button class="btn btn-ghost">More info</button>
+
+    <div>
+        @if(session() -> has('message'))
+            <div class="p-3 text-green-900 bg-green-500 rounded shadow-sm">
+                {{ session('message') }}
             </div>
-        </div>
-        @endforeach
+        @endif
     </div>
-   </div>
+
+    <form class="flex my-4" wire:submit.prevent="addPost">
+        <input wire:model.debounce.500ms="newPost" type="text" class="w-full p-2 my-2 mr-2 border rounded shadow text-gray-900" placeholder="new comment here..."/>
+
+        @error("newPost")
+        <div>
+            <span class="text-red-800">{{ $message }}</span>
+        </div>
+        @enderror
+
+        <div class="py-2">
+{{--            <span class="text-gray-900"> {{ $newPost }}</span>--}}
+
+            <button class="w-20 p-2 text-white bg-blue-500 rounded shadow">
+                Add
+            </button>
+        </div>
+
+
+    </form>
+
+
+    @foreach($comments as $comment)
+    <div class="p-3 my-2 border rounded shadow">
+
+        <div class="flex justify-between my-2">
+            <div class="flex">
+                <p class="text-lg font-bold text-gray-900">
+                    {{ $comment -> writer -> name }}
+                </p>
+
+                <p class="py-1 mx-3 text-xs font-semibold text-gray-500">
+                    {{ $comment -> created_at -> diffForHumans() }}
+                </p>
+                <i wire:click="$emit('deleteClicked', {{ $comment -> id }})" class="text-red-200 fas fa-times cursor-pointer hover:text-red-600"></i>
+            </div>
+
+            <p class="text-gray-800">
+                {{ $comment -> content }}
+            </p>
+
+            @if($comment -> image)
+                <img src="{{ $comment -> image }}"/>
+            @endif
+        </div>
+
+    </div>
+    @endforeach
+
+    {{ $comments -> links() }}
+
+</div>
+
+<script>
+    window.livewire.on('deleteClicked' ,(id) => {
+        if(confirm("Are you sure to delete?")) {
+            window.livewire.emit('delete',id);
+        } else {
+            console.log('false');
+        }
+    })
+</script>
