@@ -62,7 +62,8 @@ class Board extends Component
 
     public function remove($postId) {
         $comments = Comment::find($postId);
-        Storage::disk('public') -> delete('images/'.$comments -> image);
+        if($this -> image)
+            Storage::disk('public') -> delete('images/'.$comments -> image);
         $comments -> delete();
 
         session() -> flash("message", 'Post deleted successfully');
