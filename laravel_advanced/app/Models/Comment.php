@@ -18,4 +18,8 @@ class Comment extends Model
     public function writer() {
         return $this -> belongsTo(User::class, 'user_id');
     }
+
+    public function getImagePathAttribute() {
+        return 'storage/images/'.$this -> image;
+    }
 }
