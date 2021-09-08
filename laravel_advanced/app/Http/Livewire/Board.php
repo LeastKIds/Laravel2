@@ -29,13 +29,13 @@ class Board extends Component
 
     protected $rules = [
         'newComment' => 'required',
-        'image' => 'image|max:10240'
+        'image' => 'image|max:10240|nullable'
     ];
 
     public function addPost() {
 
-
         $this -> validate();
+
 
         // 이미지가 있으면 원하는 폴더에 저장하고
         // 저장된 그 파일의 이름을 기억.
