@@ -50,7 +50,7 @@
     <div class="p-3 my-2 border rounded shadow">
 
         <div class="flex justify-between my-2">
-            <div class="flex">
+            <div class="flex ">
                 <p class="text-lg font-bold text-gray-900">
                     {{ $comment -> writer -> name }}
                 </p>
@@ -59,6 +59,8 @@
                     {{ $comment -> created_at -> diffForHumans() }}
                 </p>
                 <i wire:click="$emit('deleteClicked', {{ $comment -> id }})" class="text-red-200 fas fa-times cursor-pointer hover:text-red-600"></i>
+                <i wire:click="$emit('openModal', 'edit-comment', {{ json_encode(['commentId' => $comment -> id]) }})" class="mx-5 text-red-200 fas fa-edit cursor-pointer hover:text-red-600"></i>
+
             </div>
 
             <p class="text-gray-800">
