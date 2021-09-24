@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 
 use App\Models\Comment;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Intervention\Image\ImageManagerStatic;
@@ -16,15 +17,28 @@ class Board extends Component
 
     public $newComment;
     public $image;
+    public $userId;
+
     use WithPagination;
     use WithFileUploads;
 
     protected $listeners = [
-        'delete' => 'remove'
+        'delete' => 'remove',
+        'commentUpdated' => 'getComments',
+        'userSelected',
     ];
+
+    public function userSelected($userId) {
+        $this -> userId = $userId;
+    }
+
+    public function getComments() {
+
+    }
 
     public function mount() {
         $this -> newComment = "" ;
+        $this -> userId = Auth::user() -> id;
     }
 
     protected $rules = [
@@ -90,7 +104,7 @@ class Board extends Component
     public function render()
     {
 
-        $comments = Comment::latest() -> paginate(5);
+        $comments = Comment::where('user_id',$this -> userId) -> latest() -> paginate(5);
 
         return view('livewire.board', compact('comments'));
     }

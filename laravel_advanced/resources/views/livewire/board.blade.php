@@ -9,6 +9,7 @@
         @endif
     </div>
 
+    @if(Auth::user() -> id == $userId)
     <section>
         @if($image)
             <img src="{{ $image -> temporaryUrl() }}" width="200">
@@ -44,6 +45,8 @@
 
 
     </form>
+    @endif
+
 
 
     @foreach($comments as $comment)
@@ -76,6 +79,10 @@
     @endforeach
 
     {{ $comments -> links() }}
+
+    <div wire:poll.1000ms.visible>
+        Current time: {{ now() }}
+    </div>
 
 </div>
 
