@@ -8,9 +8,10 @@
             />
         </template>
 
-        <message-container :messages="messages">
-        </message-container>
-        <input-message :room="currentRoom" v-on:messageSent="getMessages(currentRoom.id)">
+        <styled-message-container :messages="messages" />
+<!--        <message-container :messages="messages">-->
+<!--        </message-container>-->
+        <input-message :room="currentRoom" v-on:messageSent="getMessages">
 
         </input-message>
     </app-layout>
@@ -21,6 +22,7 @@ import AppLayout from '@/Layouts/AppLayout.vue';
 import MessageContainer from './messageContainer.vue';
 import InputMessage from './inputMessage.vue';
 import ChatRoomSelection from './chatRoomSelection.vue';
+import StyledMessageContainer from './styledMessageContainer.vue';
 
 export default {
     name: "container",
@@ -29,6 +31,7 @@ export default {
         MessageContainer,
         InputMessage,
         ChatRoomSelection,
+        StyledMessageContainer,
     },
     data() {
         return {
@@ -50,22 +53,48 @@ export default {
             })
         },
         setRoom(room) {
+            // if(this.currentRoom != null && this.currentRoom.id != room.id) {
+            //     this.disconnect(this.currentRoom);
+            // }
             this.currentRoom = room;
-            this.getMessages(room.id);
+            // this.connect();
+            // this.getMessages(room.id);
         },
-        getMessages(roomId) {
-            axios.get('/chat/room/' + roomId + '/messages')
+        getMessages() {
+            axios.get('/chat/room/' + this.currentRoom.id + '/messages')
                 .then(response => {
                     this.messages = response.data;
                 }).catch(error => {
                     console.log(error);
             })
         },
+        disconnect(room) {
+            window.Echo.leave('chat.'+room.id);
+        },
+        connect() {
+        //    방이 변경되었을 때, 이 메소드가 호출되니
+        //    이 방의 메세지를 불러와 디스플레이 해준다.
+        //    변경된 방은 currentRoom에 정보가 있음
+            this.getMessages();
+            const vm = this;
+            window.Echo.private('chat.'+this.currentRoom.id)
+                .listen('.message.new', e=> {
+                    vm.getMessages();
+            });
+        }
+    },
+    watch: {
+        currentRoom(val, oldVal) {
+            if (oldVal.id) {
+                this.disconnect(oldVal);
+            }
+            this.connect();
+        }
     },
 
     created() {
         this.getRooms();
-    }
+    },
 }
 </script>
 
