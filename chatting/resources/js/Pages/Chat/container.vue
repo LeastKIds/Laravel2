@@ -8,7 +8,7 @@
             />
         </template>
 
-        <styled-message-container :messages="messages" />
+        <styled-message-container :messages="messages" :loginUserId="loginUserId" />
 <!--        <message-container :messages="messages">-->
 <!--        </message-container>-->
         <input-message :room="currentRoom" v-on:messageSent="getMessages">

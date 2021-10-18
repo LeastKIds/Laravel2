@@ -16,7 +16,7 @@ import MessageItem from './messageItem.vue';
 
 export default {
     name: "messageContainer",
-    props:['messages'],
+    props:['messages', 'loginUserId'],
     components: {
         MessageItem,
     }
