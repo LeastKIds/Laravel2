@@ -28,7 +28,7 @@ class ChatController extends Controller
 
     public function messages($roomId) {
 //        select * from chat_messages where room_id = ?
-        $msgs =  ChatMessage::where('chat_room_id', $roomId)->with('user')-> latest() -> get(); // where('chat_room_id', '=', $roomId) 이지만 = 은 생략 가능
+        $msgs =  ChatMessage::where('chat_room_id', $roomId)->with('user')-> latest() -> paginate(); // where('chat_room_id', '=', $roomId) 이지만 = 은 생략 가능
         // with('user') user 테이블과 함께 줘라
         //        lazy loading VS eager loading
 //        dd($msgs);
@@ -45,10 +45,17 @@ class ChatController extends Controller
             'message' => $request -> message,
         ]);
 
-        broadcast(new NewChatMessage($msg -> chat_room_id) ) -> toOthers();
+        $msg -> load('user');   // 설정되어 있다면 조인 model의 chatMessage에 user가 설정되어있다면
+        broadcast(new NewChatMessage($msg) ) -> toOthers();
 
         return $msg;
     }
 
+
+
+
+    public function indexV2() {
+        return Inertia::render('Chat/containerV2');
+    }
 
 }

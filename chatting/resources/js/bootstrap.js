@@ -1,4 +1,6 @@
 window._ = require('lodash');
+import {debounce} from 'lodash/function';
+window.debounce = debounce;
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
