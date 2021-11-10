@@ -1240,11 +1240,17 @@ select {
 .mb-2 {
 	margin-bottom: 0.5rem;
 }
+.mb-5 {
+	margin-bottom: 1.25rem;
+}
 .block {
 	display: block;
 }
 .inline-block {
 	display: inline-block;
+}
+.inline {
+	display: inline;
 }
 .flex {
 	display: flex;
@@ -1285,11 +1291,11 @@ select {
 .h-20 {
 	height: 5rem;
 }
-.h-96 {
-	height: 24rem;
-}
 .h-screen {
 	height: 100vh;
+}
+.h-96 {
+	height: 24rem;
 }
 .min-h-screen {
 	min-height: 100vh;

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ChatController;
 use Illuminate\Foundation\Application;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -39,7 +40,10 @@ Route::middleware(['auth:sanctum', 'verified'])->post('/chat/{roomId}/message', 
 Route::middleware(['auth:sanctum', 'verified'])->get('/chatV2',[ChatController::class, 'indexV2']) -> name('chatV2');
 
 
+Route::get('test', function() {
+    return Inertia::render('test/test');
+}) -> name('Test');
 
-Route::middleware(['auth:sanctum']) -> get('/test', function() {
-    return 'test';
+Route::post('test', function(Request $request) {
+    return $request;
 });

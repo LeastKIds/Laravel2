@@ -1,7 +1,12 @@
 <template>
     <div class="grid grid-cols-2">
+
+
         <div class="font-bold text-xl">
             {{ currentRoom.name }} Chat Room
+            <jet-nav-link :href="route('Test')" :active="route().current('Test')">
+                Chat
+            </jet-nav-link>
         </div>
 
         <select
@@ -21,6 +26,7 @@
 </template>
 
 <script>
+
 export default {
     name: "chatRoomSelection",
     props: ['rooms','currentRoom'],
